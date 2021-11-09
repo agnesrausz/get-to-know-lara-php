@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,17 +16,17 @@ class CreateMailsTable extends Migration
     {
         Schema::create('mails', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_user_to')
+            $table->foreignIdFor(User::class, 'id_user_to')
                 ->nullable()
-                ->constrained();
-            $table->foreignId('id_user_from')
+                ->constrained('users');
+            $table->foreignIdFor(User::class, 'id_user_from')
                 ->nullable()
-                ->constrained();
+                ->constrained('users');
             $table->string('subject');
-            $table->string('message');
+            $table->text('message')->nullable();
             $table->boolean('is_read');
-            $table->timestamps('sent');
-            $table->timestamps('created');
+            $table->timestamp('sent')->nullable();
+            $table->timestamp('created')->useCurrent();
         });
     }
 
